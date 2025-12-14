@@ -4,12 +4,12 @@ Terminal UI manager for **video wallpapers** using **mpvpaper** on Wayland.
 
 `mpvwall` provides a simple curses-based interface to manage video wallpapers:
 select a folder, choose a video, pick a monitor (or ALL), and apply it instantly.
+
 The actual wallpaper process is handled by `mpvpaper`, which is launched in
-forked mode — `mpvwall` itself does **not** stay running in the background.
+**forked mode** — `mpvwall` itself does **not** stay running in the background.
 
-Tested primarily on **Hyprland**, but should work on other Wayland compositors
-that support `layer-shell`.
-
+> Tested primarily on **Hyprland** (Arch Linux), but should work on other Wayland
+> compositors that support `layer-shell`.
 
 ## ✨ Features
 
@@ -21,7 +21,6 @@ that support `layer-shell`.
 - 🔁 Restore last wallpaper on login
 - 🧠 NVIDIA-friendly (`gpu-context=wayland`)
 - 🚀 No background daemon — `mpvpaper` is forked
-
 
 ## 📦 Requirements
 
@@ -35,19 +34,23 @@ that support `layer-shell`.
 - Python **>= 3.9**
 - No external Python dependencies (standard library only)
 
-
 ## 🔧 Installation
+
+### Arch Linux (AUR) — **recommended**
+
+```bash
+yay -S mpvwall-git
+````
 
 ### From source
 
 ```bash
-git clone https://github.com/methamphetaminelab/mpvwall/tree/main
+git clone https://github.com/methamphetaminelab/mpvwall
 cd mpvwall
 pip install -e .
-````
+```
 
-This will install the `mpvwall` command into your environment.
-
+This installs the `mpvwall` command into your environment.
 
 ## ▶ Usage
 
@@ -57,12 +60,14 @@ This will install the `mpvwall` command into your environment.
 mpvwall
 ```
 
-* Select wallpaper with `↑` `↓`
-* Change monitor with `←` `→`
-* Apply with `Enter`
-* Stop wallpaper with `S`
-* Change folder with `F`
-* Quit with `Q`
+Controls:
+
+* `↑` `↓` — select wallpaper
+* `←` `→` — change monitor
+* `Enter` — apply wallpaper
+* `S` — stop wallpaper
+* `F` — change folder
+* `Q` — quit
 
 ### Restore last wallpaper
 
@@ -70,16 +75,17 @@ mpvwall
 mpvwall --restore
 ```
 
-This reads the saved configuration and reapplies:
+Restores:
 
-* last wallpaper
+* last selected wallpaper
 * selected monitor
 * mpv options
 
+Useful for autostart.
 
 ## ⚙ Configuration
 
-Configuration file is stored at:
+Configuration file:
 
 ```text
 ~/.config/mpvwall/config.json
@@ -96,25 +102,23 @@ Example:
 }
 ```
 
-
 ## 🚀 Autostart (Hyprland)
 
-Add to your `~/.config/hypr/hyprland.conf`:
+Add to `~/.config/hypr/hyprland.conf`:
 
 ```ini
 exec-once = mpvwall --restore
 ```
 
-If wallpapers sometimes start too early:
+If wallpapers start too early:
 
 ```ini
 exec-once = sleep 1 && mpvwall --restore
 ```
 
-⚠️ Important:
+⚠️ **Important**
 Do **not** run other wallpaper managers (`swww`, `hyprpaper`, `waypaper`)
 at the same time — they will conflict with `mpvpaper`.
-
 
 ## 🧪 Troubleshooting
 
@@ -126,6 +130,7 @@ at the same time — they will conflict with `mpvpaper`.
   pkill swww
   pkill hyprpaper
   ```
+
 * Check logs:
 
   ```bash
@@ -140,7 +145,6 @@ Recommended mpv options (default):
 loop no-audio gpu-context=wayland
 ```
 
-
 ## 📜 Logging
 
 Logs are written to:
@@ -149,17 +153,11 @@ Logs are written to:
 ~/.local/state/mpvwall/mpvwall.log
 ```
 
-Use `--debug` for more verbose output:
+Enable debug logging:
 
 ```bash
 mpvwall --debug
 ```
-
-
-## 📄 License
-
-MIT License
-
 
 ## ❤️ Acknowledgements
 
