@@ -41,7 +41,7 @@ that support `layer-shell`.
 ### From source
 
 ```bash
-git clone https://github.com/<your-username>/mpvwall
+git clone https://github.com/methamphetaminelab/mpvwall/tree/main
 cd mpvwall
 pip install -e .
 ````
