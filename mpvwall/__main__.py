@@ -5,16 +5,21 @@ from mpvwall.log import setup_logging
 from mpvwall.autostart import restore
 from mpvwall.tui import run
 
-DEBUG = "--debug" in sys.argv
+def main():
+    DEBUG = "--debug" in sys.argv
 
-setup_logging(debug=DEBUG)
-log = logging.getLogger("mpvwall")
+    setup_logging(debug=DEBUG)
+    log = logging.getLogger("mpvwall")
 
-log.info("mpvwall started")
+    log.info("mpvwall started")
 
-if "--restore" in sys.argv:
-    restore()
-else:
-    run()
+    if "--restore" in sys.argv:
+        restore()
+    else:
+        run()
 
-log.info("mpvwall exited")
+    log.info("mpvwall exited")
+
+
+if __name__ == "__main__":
+    main()
