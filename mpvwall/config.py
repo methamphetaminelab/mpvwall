@@ -8,7 +8,10 @@ DEFAULT = {
     "wallpapers_dir": "",
     "selected": "",
     "output": "ALL",
-    "mpv_options": "loop no-audio gpu-context=wayland"
+    "mpv_options": "loop no-audio gpu-context=wayland",
+    "layer": "bottom",  # background, bottom, top, overlay
+    "recursive": False,  # Search in subdirectories
+    "enable_ipc": False  # Enable IPC socket for pause/resume (may cause issues with some layers)
 }
 
 def load():

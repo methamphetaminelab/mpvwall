@@ -16,4 +16,10 @@ def restore():
     if not path.exists():
         return
 
-    start(str(path), cfg["output"], cfg["mpv_options"])
+    start(
+        str(path), 
+        cfg["output"], 
+        cfg["mpv_options"], 
+        cfg.get("layer", "bottom"),
+        cfg.get("enable_ipc", False)
+    )

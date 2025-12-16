@@ -16,11 +16,17 @@ The actual wallpaper process is handled by `mpvpaper`, which is launched in
 - 🖥 Terminal UI (curses, no GUI dependencies)
 - 🎞 Video wallpapers via `mpvpaper`
 - 📂 Built-in folder picker
+- 🔍 Recursive search in subdirectories
+- 📊 Video metadata display (resolution, duration, size, FPS)
 - 🖥 Monitor selection (ALL or per-output)
 - 🛑 Start / Stop wallpaper
+- ⏯️ Pause / Resume via IPC (optional)
 - 🔁 Restore last wallpaper on login
+- ⚙️ Configurable layer level (background, bottom, top, overlay)
+- 💬 Async notifications (non-blocking)
 - 🧠 NVIDIA-friendly (`gpu-context=wayland`)
 - 🚀 No background daemon — `mpvpaper` is forked
+- 📝 Detailed logging for debugging
 
 ## 📦 Requirements
 
@@ -29,6 +35,7 @@ The actual wallpaper process is handled by `mpvpaper`, which is launched in
 - `mpv`
 - `mpvpaper`
 - `hyprctl` (from Hyprland)
+- `ffprobe` (optional, for video metadata display)
 
 ### Python
 - Python **>= 3.9**
@@ -66,7 +73,9 @@ Controls:
 * `←` `→` — change monitor
 * `Enter` — apply wallpaper
 * `S` — stop wallpaper
+* `P` — pause/resume playback (IPC)
 * `F` — change folder
+* `R` — toggle recursive search
 * `Q` — quit
 
 ### Restore last wallpaper
@@ -83,6 +92,18 @@ Restores:
 
 Useful for autostart.
 
+### Check status
+
+```bash
+mpvwall --status
+```
+
+Shows:
+* Whether mpvpaper is running
+* Current wallpaper configuration
+* Hyprland layer information
+* Log file locations
+
 ## ⚙ Configuration
 
 Configuration file:
@@ -98,9 +119,19 @@ Example:
   "wallpapers_dir": "/home/user/Wallpapers",
   "selected": "example.mp4",
   "output": "ALL",
-  "mpv_options": "loop no-audio gpu-context=wayland"
+  "mpv_options": "loop no-audio gpu-context=wayland",
+  "layer": "bottom",
+  "recursive": false,
+  "enable_ipc": false
 }
 ```
+
+**Options:**
+- `layer`: Layer level - `bottom` (recommended), `background`, `top`, or `overlay`
+  - Use `bottom` for best compatibility
+  - `background` may not work with IPC enabled
+- `recursive`: Search for videos in subdirectories
+- `enable_ipc`: Enable IPC socket for pause/resume control (disable if wallpapers don't start)
 
 ## 🚀 Autostart (Hyprland)
 
@@ -135,7 +166,11 @@ at the same time — they will conflict with `mpvpaper`.
 
   ```bash
   ~/.local/state/mpvwall/mpvwall.log
+  ~/.local/state/mpvwall/mpvpaper.log
   ```
+
+  The `mpvpaper.log` contains output from mpvpaper itself, which may reveal
+  why the wallpaper stops unexpectedly.
 
 ### NVIDIA users
 
@@ -150,13 +185,22 @@ loop no-audio gpu-context=wayland
 Logs are written to:
 
 ```text
-~/.local/state/mpvwall/mpvwall.log
+~/.local/state/mpvwall/mpvwall.log   (application log)
+~/.local/state/mpvwall/mpvpaper.log  (mpvpaper output)
 ```
 
 Enable debug logging:
 
 ```bash
 mpvwall --debug
+```
+
+## 🆘 Help
+
+Show help message:
+
+```bash
+mpvwall --help
 ```
 
 ## ❤️ Acknowledgements
