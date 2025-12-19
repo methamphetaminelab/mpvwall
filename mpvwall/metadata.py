@@ -1,4 +1,3 @@
-"""Video metadata extraction utilities"""
 import subprocess
 import json
 import logging
@@ -8,13 +7,7 @@ from typing import Optional, Dict
 log = logging.getLogger("mpvwall.metadata")
 
 def get_video_info(video_path: Path) -> Optional[Dict]:
-    """Get video metadata using ffprobe
-    
-    Returns dict with keys: duration, width, height, size, fps
-    Returns None if ffprobe not available or fails
-    """
     try:
-        # Check if ffprobe is available
         result = subprocess.run(
             [
                 "ffprobe",
@@ -34,7 +27,6 @@ def get_video_info(video_path: Path) -> Optional[Dict]:
         
         data = json.loads(result.stdout)
         
-        # Extract video stream info
         video_stream = None
         for stream in data.get("streams", []):
             if stream.get("codec_type") == "video":
@@ -44,14 +36,11 @@ def get_video_info(video_path: Path) -> Optional[Dict]:
         if not video_stream:
             return None
         
-        # Extract format info
         format_info = data.get("format", {})
         
-        # Calculate duration
         duration = float(format_info.get("duration", 0))
         duration_str = f"{int(duration//60)}:{int(duration%60):02d}" if duration > 0 else "?"
         
-        # Get file size
         size_bytes = int(format_info.get("size", 0))
         if size_bytes > 1024**3:
             size_str = f"{size_bytes / 1024**3:.1f}GB"
@@ -60,7 +49,6 @@ def get_video_info(video_path: Path) -> Optional[Dict]:
         else:
             size_str = f"{size_bytes / 1024:.1f}KB"
         
-        # Get FPS
         fps_str = video_stream.get("r_frame_rate", "?")
         if "/" in fps_str:
             num, den = fps_str.split("/")
@@ -84,7 +72,6 @@ def get_video_info(video_path: Path) -> Optional[Dict]:
         return None
 
 def format_video_info(info: Optional[Dict]) -> str:
-    """Format video info as a single line string"""
     if not info:
         return ""
     

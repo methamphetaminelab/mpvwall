@@ -48,7 +48,6 @@ def print_status():
     
     print("=== mpvwall Status ===\n")
     
-    # Check if mpvpaper is running
     running = is_mpvpaper_running()
     pids = get_mpvpaper_pids()
     
@@ -57,13 +56,11 @@ def print_status():
     else:
         print("✗ mpvpaper is not running")
     
-    # Show current config
     print(f"\nCurrent wallpaper: {cfg.get('selected', 'None')}")
     print(f"Folder: {cfg.get('wallpapers_dir', 'Not set')}")
     print(f"Output: {cfg.get('output', 'ALL')}")
     print(f"MPV options: {cfg.get('mpv_options', 'default')}")
     
-    # Check Hyprland layers
     layer_info = check_hyprland_layers()
     if layer_info["available"]:
         if layer_info["count"] > 0:
@@ -73,7 +70,6 @@ def print_status():
         else:
             print("\n⚠️  No mpvpaper layers found in Hyprland (wallpaper may not be visible)")
     
-    # Show logs location
     print(f"\nLogs:")
     print(f"  ~/.local/state/mpvwall/mpvwall.log")
     print(f"  ~/.local/state/mpvwall/mpvpaper.log")

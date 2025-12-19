@@ -1,4 +1,3 @@
-"""MPV IPC control for pause/resume functionality"""
 import socket
 import json
 import logging
@@ -10,15 +9,6 @@ log = logging.getLogger("mpvwall.ipc")
 IPC_SOCKET = Path("/tmp/mpvpaper.sock")
 
 def send_command(command: str, args: list = None) -> Optional[dict]:
-    """Send command to mpv via IPC socket
-    
-    Args:
-        command: MPV command name
-        args: Command arguments
-    
-    Returns:
-        Response dict or None if failed
-    """
     if not IPC_SOCKET.exists():
         log.warning("IPC socket not found at %s", IPC_SOCKET)
         return None
@@ -55,20 +45,10 @@ def send_command(command: str, args: list = None) -> Optional[dict]:
     return None
 
 def toggle_pause() -> bool:
-    """Toggle pause state of mpv
-    
-    Returns:
-        True if successful, False otherwise
-    """
     response = send_command("cycle", ["pause"])
     return response is not None
 
 def get_pause_state() -> Optional[bool]:
-    """Get current pause state
-    
-    Returns:
-        True if paused, False if playing, None if unknown
-    """
     response = send_command("get_property", ["pause"])
     if response and "data" in response:
         return response["data"]

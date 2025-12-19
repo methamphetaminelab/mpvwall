@@ -1,5 +1,21 @@
 # Changelog
 
+# Changelog
+
+## [0.3.0] - 2025-12-19
+
+### Added
+- Default mpv options include `vid=1` and `hwdec=auto-safe` for reliable playback on Wayland
+- Hyprland output names kept case-sensitive when launching mpvpaper
+
+### Changed
+- TUI no longer edits mpv options; configure `mpv_options` in `~/.config/mpvwall/config.json`
+- Recommended defaults documented in README
+
+### Fixed
+- mpvpaper now forces a video track if none specified, avoiding "No video or audio streams selected"
+- TUI prompts no longer flicker/close immediately on some curses builds
+
 ## [0.2.0] - 2025-12-16
 
 ### Added

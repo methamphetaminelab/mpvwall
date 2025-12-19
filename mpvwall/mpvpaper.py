@@ -26,6 +26,8 @@ def start(wallpaper: str, output: str, options: str, layer: str = "bottom", enab
     stop()
 
     mpv_opts = options
+    if "vid=" not in mpv_opts and "--vid=" not in mpv_opts:
+        mpv_opts = f"{mpv_opts} vid=1".strip()
     if enable_ipc:
         ipc_socket = "/tmp/mpvpaper.sock"
         if os.path.exists(ipc_socket):
@@ -33,15 +35,16 @@ def start(wallpaper: str, output: str, options: str, layer: str = "bottom", enab
                 os.remove(ipc_socket)
             except OSError:
                 pass
-        mpv_opts = f"{options} input-ipc-server={ipc_socket}"
+        mpv_opts = f"{mpv_opts} input-ipc-server={ipc_socket}"
         log.info("IPC enabled at %s", ipc_socket)
+    output_arg = "ALL" if output.strip().lower() == "all" else output
 
     cmd = [
         "mpvpaper",
         "--layer", layer,
         "--fork",
         "--mpv-options", mpv_opts,
-        output.upper(),
+        output_arg,
         wallpaper,
     ]
 

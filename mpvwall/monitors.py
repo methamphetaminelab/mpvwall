@@ -6,7 +6,6 @@ import shutil
 log = logging.getLogger("mpvwall.monitors")
 
 def get_monitors() -> list[str]:
-    # Check if hyprctl is available
     if not shutil.which("hyprctl"):
         log.error("hyprctl not found! Is Hyprland running?")
         raise FileNotFoundError("hyprctl is not available")

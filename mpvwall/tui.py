@@ -16,6 +16,8 @@ log = logging.getLogger("mpvwall.tui")
 def run():
     curses.wrapper(main)
 
+
+
 def main(stdscr):
     curses.curs_set(0)
     stdscr.keypad(True)
@@ -89,8 +91,11 @@ def main(stdscr):
         if notification_msg and (current_time - notification_time) < notification_duration:
             stdscr.addstr(h - 4, 2, notification_msg[:w - 4], curses.A_REVERSE)
 
-        status = f"Wallpaper: {cfg['selected'] or '-'} | Output: {monitors[mon_idx]}"
-        helpbar = "[↑↓] Select [←→] Monitor [Enter] Apply [S] Stop [P] Pause [F] Folder [R] Rec [Q] Quit"
+        status = (
+            f"Wallpaper: {cfg['selected'] or '-'} | Output: {monitors[mon_idx]} | "
+            f"Layer: {cfg.get('layer', 'bottom')} | IPC: {'on' if cfg.get('enable_ipc') else 'off'}"
+        )
+        helpbar = "[↑↓] Select [←→] Monitor [Enter] Apply [S] Stop [P] Pause [F] Folder [R] Rec [L] Layer [I] IPC [Q] Quit"
 
         stdscr.addstr(h - 2, 2, status[:w - 4], curses.A_DIM)
         stdscr.addstr(h - 1, 2, helpbar[:w - 4], curses.A_DIM)
@@ -164,5 +169,17 @@ def main(stdscr):
             metadata_cache.clear()
             mode = "enabled" if cfg["recursive"] else "disabled"
             show_notification(f"Recursive mode {mode}", 1)
+        elif key in (ord("l"), ord("L")):
+            layers = ["background", "bottom", "top", "overlay"]
+            current = cfg.get("layer", "bottom")
+            next_idx = (layers.index(current) + 1) % len(layers) if current in layers else 0
+            cfg["layer"] = layers[next_idx]
+            save(cfg)
+            show_notification(f"Layer set to {cfg['layer']}", 1)
+        elif key in (ord("i"), ord("I")):
+            cfg["enable_ipc"] = not cfg.get("enable_ipc", False)
+            save(cfg)
+            state = "enabled" if cfg["enable_ipc"] else "disabled"
+            show_notification(f"IPC {state}", 1)
         elif key in (ord("q"), ord("Q")):
             break

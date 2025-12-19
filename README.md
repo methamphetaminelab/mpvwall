@@ -1,4 +1,4 @@
-# mpvwall 🎬
+# mpvwall
 
 Terminal UI manager for **video wallpapers** using **mpvpaper** on Wayland.
 
@@ -11,24 +11,24 @@ The actual wallpaper process is handled by `mpvpaper`, which is launched in
 > Tested primarily on **Hyprland** (Arch Linux), but should work on other Wayland
 > compositors that support `layer-shell`.
 
-## ✨ Features
+## Features
 
-- 🖥 Terminal UI (curses, no GUI dependencies)
-- 🎞 Video wallpapers via `mpvpaper`
-- 📂 Built-in folder picker
-- 🔍 Recursive search in subdirectories
-- 📊 Video metadata display (resolution, duration, size, FPS)
-- 🖥 Monitor selection (ALL or per-output)
-- 🛑 Start / Stop wallpaper
-- ⏯️ Pause / Resume via IPC (optional)
-- 🔁 Restore last wallpaper on login
-- ⚙️ Configurable layer level (background, bottom, top, overlay)
-- 💬 Async notifications (non-blocking)
-- 🧠 NVIDIA-friendly (`gpu-context=wayland`)
-- 🚀 No background daemon — `mpvpaper` is forked
-- 📝 Detailed logging for debugging
+- Terminal UI (curses, no GUI dependencies)
+- Video wallpapers via `mpvpaper`
+- Built-in folder picker
+- Recursive search in subdirectories
+- Video metadata display (resolution, duration, size, FPS)
+- Monitor selection (ALL or per-output)
+- Start / Stop wallpaper
+- Pause / Resume via IPC (optional)
+- Restore last wallpaper on login
+- Configurable layer level (background, bottom, top, overlay)
+- Async notifications (non-blocking)
+- NVIDIA-friendly defaults (`gpu-context=wayland`, `hwdec` configurable)
+- No background daemon — `mpvpaper` is forked
+- Detailed logging for debugging
 
-## 📦 Requirements
+## Requirements
 
 ### System
 - Wayland compositor (tested on **Hyprland**)
@@ -41,7 +41,7 @@ The actual wallpaper process is handled by `mpvpaper`, which is launched in
 - Python **>= 3.9**
 - No external Python dependencies (standard library only)
 
-## 🔧 Installation
+## Installation
 
 ### Arch Linux (AUR) — **recommended**
 
@@ -59,7 +59,7 @@ pip install -e .
 
 This installs the `mpvwall` command into your environment.
 
-## ▶ Usage
+## Usage
 
 ### Launch TUI
 
@@ -104,7 +104,7 @@ Shows:
 * Hyprland layer information
 * Log file locations
 
-## ⚙ Configuration
+## Configuration
 
 Configuration file:
 
@@ -119,7 +119,7 @@ Example:
   "wallpapers_dir": "/home/user/Wallpapers",
   "selected": "example.mp4",
   "output": "ALL",
-  "mpv_options": "loop no-audio gpu-context=wayland",
+  "mpv_options": "loop no-audio gpu-context=wayland vid=1 hwdec=auto-safe",
   "layer": "bottom",
   "recursive": false,
   "enable_ipc": false
@@ -127,13 +127,12 @@ Example:
 ```
 
 **Options:**
-- `layer`: Layer level - `bottom` (recommended), `background`, `top`, or `overlay`
-  - Use `bottom` for best compatibility
-  - `background` may not work with IPC enabled
-- `recursive`: Search for videos in subdirectories
+- `layer`: `bottom` (recommended), `background`, `top`, `overlay`
+- `recursive`: Search in subdirectories
 - `enable_ipc`: Enable IPC socket for pause/resume control (disable if wallpapers don't start)
+- `mpv_options`: mpv args passed to mpvpaper. Recommended default above; switch `hwdec=auto-safe` → `hwdec=nvdec` on NVIDIA. TUI does not edit this value; change it in the config file.
 
-## 🚀 Autostart (Hyprland)
+## Autostart (Hyprland)
 
 Add to `~/.config/hypr/hyprland.conf`:
 
@@ -147,11 +146,11 @@ If wallpapers start too early:
 exec-once = sleep 1 && mpvwall --restore
 ```
 
-⚠️ **Important**
+**Important**
 Do **not** run other wallpaper managers (`swww`, `hyprpaper`, `waypaper`)
 at the same time — they will conflict with `mpvpaper`.
 
-## 🧪 Troubleshooting
+## Troubleshooting
 
 ### Wallpaper does not appear
 
@@ -177,10 +176,12 @@ at the same time — they will conflict with `mpvpaper`.
 Recommended mpv options (default):
 
 ```text
-loop no-audio gpu-context=wayland
+loop no-audio gpu-context=wayland vid=1 hwdec=auto-safe
 ```
 
-## 📜 Logging
+NVIDIA users can set `hwdec=nvdec`. The app also forces `vid=1` at runtime if missing to avoid mpv selecting no track.
+
+## Logging
 
 Logs are written to:
 
@@ -195,7 +196,7 @@ Enable debug logging:
 mpvwall --debug
 ```
 
-## 🆘 Help
+## Help
 
 Show help message:
 
@@ -203,7 +204,7 @@ Show help message:
 mpvwall --help
 ```
 
-## ❤️ Acknowledgements
+## Acknowledgements
 
 * [`mpv`](https://mpv.io/)
 * [`mpvpaper`](https://github.com/GhostNaN/mpvpaper)

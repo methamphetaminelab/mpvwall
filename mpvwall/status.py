@@ -1,4 +1,3 @@
-"""Status checking utilities for mpvwall"""
 import subprocess
 import logging
 import json
@@ -6,7 +5,6 @@ import json
 log = logging.getLogger("mpvwall.status")
 
 def is_mpvpaper_running() -> bool:
-    """Check if mpvpaper is currently running"""
     try:
         result = subprocess.run(
             ["pgrep", "-x", "mpvpaper"],
@@ -19,7 +17,6 @@ def is_mpvpaper_running() -> bool:
         return False
 
 def get_mpvpaper_pids() -> list[int]:
-    """Get all mpvpaper process IDs"""
     try:
         result = subprocess.run(
             ["pgrep", "-x", "mpvpaper"],
@@ -34,7 +31,6 @@ def get_mpvpaper_pids() -> list[int]:
         return []
 
 def check_hyprland_layers() -> dict:
-    """Check if mpvpaper appears in Hyprland layers"""
     try:
         result = subprocess.run(
             ["hyprctl", "layers", "-j"],
@@ -44,7 +40,6 @@ def check_hyprland_layers() -> dict:
         )
         if result.returncode == 0:
             data = json.loads(result.stdout)
-            # Count mpvpaper layers across all monitors
             mpvpaper_layers = []
             for monitor, monitor_data in data.items():
                 if "levels" in monitor_data:
